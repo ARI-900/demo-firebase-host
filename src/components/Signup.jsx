@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { app } from '../Firebase'; 
+import {getAuth, createUserWithEmailAndPassword} from "firebase/auth";
+
+
 
 export default function Signup() {
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -9,7 +14,7 @@ export default function Signup() {
     const navigate = useNavigate();
 
 
-  const handleSignup = (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
 
     if(!email || !password || !confirmPassword) {
@@ -22,16 +27,30 @@ export default function Signup() {
       alert('Passwords do not match!');
       return;
     }
-    console.log('Signup Details:', { email, password });
+
+
     // Add your signup logic here
+    try {
+        const auth = getAuth(app);
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
 
-    confirm("Signup Successfull");
-    navigate('/');
-
-    
-    setEmail("");
-    setPassword("");
-    setConfirmPassword("");
+        if(userCredential) {
+            confirm("Signup Successfull");
+            navigate('/');
+        }
+        else {
+            alert("Signup Failed");
+        }
+    }
+    catch(error) {
+        console.warn("Error Occures in handleSignup fucntion");
+        console.log(error.message);
+    }
+    finally {
+        setEmail("");
+        setPassword("");
+        setConfirmPassword("");
+    }
   };
 
 

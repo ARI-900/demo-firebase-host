@@ -1,27 +1,46 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { app } from '../Firebase';
+import {getAuth, signInWithEmailAndPassword} from "firebase/auth";
+
 
 export default function Login() {
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const navigate = useNavigate();
 
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    console.log('Login Details:', { email, password });
-    // Add your login logic here
+
     if(!email || !password) {
       alert('Please enter email and password');
       return ;
     }
 
-    confirm("Login Successfull");
-    navigate('/products');
+    // Add your login logic here
+   try {
 
-    setEmail("");
-    setPassword("");
+        const auth = getAuth(app);
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+
+        if(userCredential) {
+            confirm("Login Successfull");
+            // localStorage.setItem("user", JSON.stringify(userCredential.user)); // dont need as state is maintained by firebase
+            navigate('/products');
+        }
+   } 
+   catch (error) {
+        console.warn("Error Occures in handleLogin fucntion");
+        console.log(error.message); 
+   }
+   finally {
+        setEmail("");
+        setPassword("");
+   }
+   
   };
 
 

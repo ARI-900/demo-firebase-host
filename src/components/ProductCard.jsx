@@ -1,13 +1,19 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 const API_URL = import.meta.env.VITE_API_URL;
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
+
+
+const auth = getAuth();
 
 
 function ProductCard() {
 
-  const [products, setProducts] = useState(null);
+    const [user, setUser] = useState(null);
+    const [products, setProducts] = useState(null);
+    const Navigate = useNavigate();
 
-  useEffect(() => {
 
     async function fetchData() {
       try {
@@ -19,8 +25,26 @@ function ProductCard() {
         console.log(error.message);
       }
     }
-    fetchData();
-  }, []);
+
+
+   useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+        if(user) {
+            setUser(user);
+            fetchData();
+            console.log("hello", user);
+        }
+        else {
+            Navigate("/");
+        }
+    })
+        return () => {
+            unsubscribe();
+        }
+   }, [])
+
+
+
 
   if (!products) {
     return (
@@ -30,10 +54,18 @@ function ProductCard() {
       }}>Loading...</p>
     )
   }
+  
 
 
   return (
     <div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem'  }}>
+            <h1>Products</h1>
+            <button
+                onClick={() => auth.signOut()}
+                style={{ backgroundColor: 'red', color: 'white', padding: '1rem 2rem', borderRadius: '10px', fontSize: '1rem' }}
+            >Logout</button>
+        </div>
       {
         products.map((product, index) => {
           return (
