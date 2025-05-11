@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 export default function Signup() {
   const [email, setEmail] = useState('');
@@ -54,6 +55,9 @@ export default function Signup() {
           Signup
         </button>
       </form>
+      <div>
+        <p>Already have an account? <Link to="/">Login</Link></p>
+      </div>
     </div>
   );
 }
