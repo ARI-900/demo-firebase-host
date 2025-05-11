@@ -60,7 +60,7 @@ function ProductCard() {
   return (
     <div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem'  }}>
-            <h1>Products</h1>
+            <h1>Products of <span style={{ color: 'red', fontWeight: 'bold', fontSize: '2rem', textTransform: 'capitalize', textDecoration: 'underline' }}>{user.email.split('@')[0]}</span></h1>
             <button
                 onClick={() => auth.signOut()}
                 style={{ backgroundColor: 'red', color: 'white', padding: '1rem 2rem', borderRadius: '10px', fontSize: '1rem' }}
