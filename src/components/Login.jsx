@@ -1,15 +1,27 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const navigate = useNavigate();
 
 
   const handleLogin = (e) => {
     e.preventDefault();
     console.log('Login Details:', { email, password });
     // Add your login logic here
+    if(!email || !password) {
+      alert('Please enter email and password');
+      return ;
+    }
+
+    confirm("Login Successfull");
+    navigate('/products');
+
+    setEmail("");
+    setPassword("");
   };
 
 
@@ -32,6 +44,7 @@ export default function Login() {
         <input
           type="password"
           placeholder="Password"
+          autoComplete='on'
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           style={styles.input}

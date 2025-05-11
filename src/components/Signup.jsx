@@ -1,22 +1,37 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Signup() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-
+    const navigate = useNavigate();
 
 
   const handleSignup = (e) => {
     e.preventDefault();
+
+    if(!email || !password || !confirmPassword) {
+      alert('Please enter email, password and confirm password');
+      return ;
+    }
+
+
     if (password !== confirmPassword) {
       alert('Passwords do not match!');
       return;
     }
     console.log('Signup Details:', { email, password });
     // Add your signup logic here
+
+    confirm("Signup Successfull");
+    navigate('/');
+
+    
+    setEmail("");
+    setPassword("");
+    setConfirmPassword("");
   };
 
 
@@ -38,6 +53,7 @@ export default function Signup() {
         <input
           type="password"
           placeholder="Password"
+          autoComplete='off'
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           style={styles.input}
@@ -47,6 +63,7 @@ export default function Signup() {
           type="password"
           placeholder="Confirm Password"
           value={confirmPassword}
+          autoCapitalize='off'
           onChange={(e) => setConfirmPassword(e.target.value)}
           style={styles.input}
           required
